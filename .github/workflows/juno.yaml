@@ -12,7 +12,7 @@ defaults:
     shell: bash
 jobs:
   terraform:
-    name:   "Terraform"
+    name:   "Juno"
     runs-on: ubuntu-latest
     env:
          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
