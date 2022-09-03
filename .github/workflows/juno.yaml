@@ -1,6 +1,6 @@
 name: "Juno node pipeline"
 on:
-  # Manual trigger Script
+  # Manual trigger
   workflow_dispatch:
   push:
     paths:
