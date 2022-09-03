@@ -28,7 +28,7 @@ jobs:
         run: |
            rm -rf .terraform
            terraform init -no-color -input=false
-      - name: Terraform Plan
+      - name: Terraform Plan -lock=false
         id: plan
         run: |
           terraform plan -input=false -no-color
