@@ -75,27 +75,12 @@ resource "aws_instance" "web" {
 
 
   tags = {
-    Name = "MyServer"
-  }
-
- 
-}
-
-resource "aws_instance" "web2" {
-  
-  ami           = "ami-0d70546e43a941d70"
-  instance_type = "t2.large"
-  key_name = "${aws_key_pair.key-module.key_name}"
-  user_data = data.template_file.user_data.rendered
-  vpc_security_group_ids = [aws_security_group.sg_web.id]
-
-
-  tags = {
     Name = "New Server"
   }
 
  
 }
+
 
 
 output "public_ip" {  
