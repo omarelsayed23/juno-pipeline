@@ -1,17 +1,19 @@
 terraform {
-  cloud {
-    organization = "omarosman23"
 
-    workspaces {
-      name = "gh-actions-demo"
-    }
-  }
 
   required_providers {
     aws = {
       source = "hashicorp/aws"
     }
   }
+
+ backend "s3" {
+ bucket = "temporary-terraform-state"
+ key = "dev/s3/terraform.tfstate"
+ region= "us-west-2"
+ dynamodb_table = "terraform_locks"
+ encrypt = true
+ }
 
 }
 
@@ -25,6 +27,37 @@ provider "aws" {
 resource "aws_key_pair" "key-module" {
   key_name   = "key-module"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqIeoyluNk/fW9w/7gBoOW3bCZrZf2f4dhPgWtGbJ/HukKCyzkxa2ugKlQWkTmAYX848UI6onhWF9Py42kiF7XVUiTXxHto1KSBmW1jM7vFK2zF/c/qcLIpsOfOh9kIMXLnk009mloMCtzGByCSKcBG63RhEdQ+Zqkxifm+2R6E6ryLauQouDXRYYr/TXqZmFFmftNhABXJKWWbAtkyBkm86pO2L1E+GxGcKoi7jjSi0wwWKocQEDL1akHrlWh4r8iBTeei0ycO38bYlnbSr3mIQCdIEifWbgVFbJ5CrPsEVI1OJQy987ZhtwJcE3eYTowzLYcr+jFYMOd8RdiBcYr"
+}
+
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "temporary-terraform-state"
+  lifecycle {
+  prevent_destroy = true
+  }
+
+  versioning {
+  enabled = true
+  }
+
+  server_side_encryption_configuration {
+  rule {
+  apply_server_side_encryption_by_default {
+  sse_algorithm = "AES256"
+  } 
+  }
+  }
+}
+
+resource "aws_dynamodb_table" "terraform_locks" {
+  name = "terraform-state-locking"
+  billing_mode = "PAY_PER_REQUEST"
+      hash_key = "LockID"
+
+  attribute {
+    name = "LockID"
+  type = "S"
+  }
+
 }
 
 
