@@ -1,4 +1,4 @@
-name: "Terraform Deployment"
+name: "Juno node pipeline"
 on:
   # Manual trigger
   workflow_dispatch:
