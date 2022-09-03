@@ -75,7 +75,7 @@ resource "aws_instance" "web" {
 
 
   tags = {
-    Name = "MyServer"
+    Name = "New Server"
   }
 
  
